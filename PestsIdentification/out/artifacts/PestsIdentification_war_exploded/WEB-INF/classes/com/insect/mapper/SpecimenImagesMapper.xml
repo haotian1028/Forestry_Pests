@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.insect.mapper.SpecimenImagesMapper">
+    <insert id="InsertImage">
+        insert into Insect.SpecimenImages (InsectId, ImagePath)
+        VALUES (#{InsectId},#{ImagePath});
+    </insert>
+    <select id="selectAllImageById" resultType="SpecimenImages">
+        select * from Insect.SpecimenImages where InsectId=#{InsectId};
+    </select>
+</mapper>

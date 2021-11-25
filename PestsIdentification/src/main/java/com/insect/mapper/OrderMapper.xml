@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.insect.mapper.OrderMapper">
+    <select id="searchAllOrder" resultType="Order">
+        select * from Insect.Order;
+    </select>
+    <insert id="addOrder" parameterType="Order">
+        insert into Insect.Order (OrderId, OrderName) values (#{orderId},#{orderName});
+    </insert>
+    <select id="queryOrderById" resultType="Order">
+        select * from Insect.`Order` where OrderId=#{OrderId};
+    </select>
+    <delete id="deleteOrderById">
+        delete from Insect.`Order` where OrderId=#{OrderId};
+    </delete>
+    <update id="updateOrder" parameterType="Order">
+        update Insect.`Order` set OrderName=#{OrderName} where OrderId=#{OrderId};
+    </update>
+</mapper>

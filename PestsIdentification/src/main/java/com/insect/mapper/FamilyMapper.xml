@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.insect.mapper.FamilyMapper">
+    <resultMap id="FamilyOrder" type="Family">
+        <result property="FamilyId" column="FamilyId"/>
+        <result property="FamilyName" column="FamilyName"/>
+        <association property="Order" column="orderId" javaType="Order" select="getOrder"/>
+    </resultMap>
+    <select id="getOrder" resultType="Order">
+        select * from Insect.`Order` where OrderId=#{orderid};
+    </select>
+    <select id="searchAllFamily" resultMap="FamilyOrder">
+        select * from Insect.Family
+    </select>
+
+
+
+    <select id="queryFamilyById" resultMap="FamilyOrder">
+        select * from Insect.Family where FamilyId=#{FamilyId};
+    </select>
+    <select id="queryFamilyByName" resultMap="FamilyOrder">
+        select * from Insect.Family where FamilyName=#{FamilyName};
+    </select>
+    <select id="searchFamilyByOrderId" resultMap="FamilyOrder">
+        select * from Insect.Family where OrderId=#{OrderId};
+    </select>
+    <insert id="addFamily">
+        insert into Insect.Family (FamilyId, FamilyName, OrderId) VALUES (#{familyId},#{familyName},#{orderId});
+    </insert>
+    <delete id="deleteFamilyById" parameterType="Family">
+        delete from Insect.Family where FamilyId=#{FamilyId};
+    </delete>
+    <update id="updateFamily">
+        update Insect.Family set FamilyName=#{familyName},OrderId=#{orderId} where FamilyId=#{familyId}
+    </update>
+</mapper>

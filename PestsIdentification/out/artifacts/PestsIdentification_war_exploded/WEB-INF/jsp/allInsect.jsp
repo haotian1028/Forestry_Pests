@@ -1,0 +1,121 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>昆虫列表</title>
+    <!-- 引入 Bootstrap -->
+
+    <link rel="stylesheet" href="../../layui-v2.6.8/layui/css/layui.css">
+    <script src="../../layui-v2.6.8/layui/layui.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body class="layui-bg-gray">
+<div class="layui-fluid">
+            <ul class="layui-nav" lay-filter="test">
+                <li class="layui-nav-item"><a href="../../index.jsp">主页</a></li>
+                <li class="layui-nav-item layui-this"><a href="#">所有昆虫</a></li>
+                <li class="layui-nav-item"><a href="${pageContext.request.contextPath}/allPest">查询害虫</a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">百科</a>
+                    <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                        <dd><a href="${pageContext.request.contextPath}/allOrder">科信息</a></dd>
+                        <dd><a href="${pageContext.request.contextPath}/allFamily">目信息</a></dd>
+                        <dd><a href="${pageContext.request.contextPath}/allGenus">属信息</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="${pageContext.request.contextPath}/image/toPredict">害虫识别</a></li>
+            </ul>
+        <div class="layui-col-xs12" style="float: left">
+            <h1>
+                <small class="layui-font-cyan">昆虫列表</small>
+            </h1>
+        </div>
+    <div class="layui-row">
+        <div class="layui-col-xs12">
+            <form  action="${pageContext.request.contextPath}/searchInsect" style="float: right"
+                   method="post">
+                <div>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="请输入昆虫名称" name="name">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">搜索</button>
+                    </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function () {
+        var element = layui.element;
+
+        //…
+    });
+</script>
+
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="layui-col-xs12">
+            <table class="table" lay-filter="demo">
+                <thead>
+                <tr>
+                    <th lay-data="{field:'username1', width:150}">名称</th>
+                    <th lay-data="{field:'username2', width:300}">昆虫代码</th>
+                    <th lay-data="{field:'username3', width:400}">拉丁学名</th>
+                    <th lay-data="{field:'username4', width:170}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="insect" items="${list}">
+                    <tr>
+                        <td>${insect.insectName}</td>
+                        <td>${insect.insectId}</td>
+                        <td>${insect.scientificName}</td>
+                        <td>
+                            <a href="${pageContext.request.contextPath}/image/toDetail?id=${insect.insectId}">详情</a>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+            <div id="page"></div>
+        </div>
+    </div>
+    <script>
+        var table = layui.table;
+        //转换静态表格
+        table.init('demo', {
+            height: 450 //设置高度
+            ,limit: 10 //注意：请务必确保 limit 参数（默认：10）是与你服务端限定的数据条数一致
+            //支持所有基础参数
+            ,col:[[{field : 'username1',title:'名称',sort: true}]]
+            ,skin: 'row' //行边框风格
+            ,even: true //开启隔行背景
+        });
+    </script>
+    <script>
+        layui.use("laypage", function () {
+            var laypage = layui.laypage
+            laypage.render({
+                elem: 'page',
+                count: 100, //数据总数，从服务端得到
+                limit: 10,
+                layout: ['prev', 'page', 'next', 'skip', 'count'],
+                curr: ${n/10}+1,
+                jump: function (obj, first) {
+                    if (!first)
+                        window.location.href = "${pageContext.request.contextPath}/allInsect?n=" + (obj.curr - 1) * 10
+                }
+
+            });
+        })
+    </script>
+
+</div>
+</body>
+</html>

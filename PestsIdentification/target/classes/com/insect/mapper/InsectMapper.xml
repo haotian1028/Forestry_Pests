@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.insect.mapper.InsectMapper">
+    <resultMap id="InsectResult" type="Insect">
+        <result property="InsectId" column="InsectId"/>
+        <result property="InsectName" column="InsectName"/>
+        <result property="ScientificName" column="ScientificName"/>
+        <result property="Crop" column="Crop"/>
+        <result property="Area" column="Area"/>
+        <association property="Genus" column="GenusId" javaType="Genus" select="getGenus"/>
+    </resultMap>
+    <select id="getGenus" resultMap="GenusResult">
+        select * from Insect.Genus where GenusId=#{GenusId};
+    </select>
+    <resultMap id="GenusResult" type="Genus">
+        <result property="GenusId" column="GenusId"/>
+        <result property="GenusName" column="GenusName"/>
+        <association property="Family" column="FamilyId" javaType="Family" select="getFamily"/>
+    </resultMap>
+    <select id="getFamily" resultMap="FamilyOrder">
+        select * from Insect.Family where FamilyId=#{FamilyId};
+    </select>
+    <resultMap id="FamilyOrder" type="Family">
+        <result property="FamilyId" column="FamilyId"/>
+        <result property="FamilyName" column="FamilyName"/>
+        <association property="Order" column="orderId" javaType="Order" select="getOrder"/>
+    </resultMap>
+    <select id="getOrder" resultType="Order">
+        select * from Insect.`Order` where OrderId=#{orderid};
+    </select>
+
+    <select id="searchAllInsect" resultMap="InsectResult">
+        select * from Insect.Insect limit #{n},10;
+    </select>
+    <select id="queryInsectById" resultMap="InsectResult">
+        select * from Insect.Insect where InsectId=#{id};
+    </select>
+    <insert id="addInsect">
+        insert into Insect.Insect (InsectId, InsectName, ScientificName, GenusId, Crop, Area)
+        VALUES (#{InsectId},#{InsectName},#{ScientificName},#{GenusId},#{Crop},#{Area});
+    </insert>
+    <delete id="deleteInsectById">
+        delete from Insect.Insect where InsectId=#{InsectId};
+    </delete>
+    <select id="queryInsectByName" resultMap="InsectResult">
+        select * from Insect.Insect where InsectName=#{InsectName};
+    </select>
+    <select id="queryInsectByScientificName" resultMap="InsectResult">
+        select * from Insect.Insect where ScientificName=#{ScientificName};
+    </select>
+    <update id="updateInsect">
+        update Insect.Insect set InsectName=#{InsectName},ScientificName=#{ScientificName},GenusId=#{GenusId},Crop=#{Crop},Area=#{Crop}
+        where InsectId=#{InsectId};
+    </update>
+    <select id="searchInsectByGenusId" resultMap="InsectResult">
+        select * from Insect.Insect where GenusId=#{GenusId};
+    </select>
+    <select id="searchInsectLike" resultMap="InsectResult">
+        select * from Insect.Insect where InsectName like "%"#{name}"%"
+    </select>
+    <select id="searchAllPest" resultMap="InsectResult">
+        select * from Insect.Insect where IsPest=1
+    </select>
+</mapper>
